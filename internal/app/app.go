@@ -41,13 +41,16 @@ func (a *app) GetShortenedURL(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (a *app) GetFullURL(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Start handler")
 	id := chi.URLParam(r, "id")
+	log.Println("Call Get URL")
 	url, err := a.storage.GetURL(id)
 	if err != nil {
 		http.Error(rw, "url not found", http.StatusBadRequest)
 	}
-	rw.Header().Set("Location", url)
+	rw.Header().Add("Location", url)
 	rw.WriteHeader(http.StatusTemporaryRedirect)
+	log.Println("Finish handler")
 }
 func ShortenURL(url string) string {
 	return "EwHXdJfB"
