@@ -33,7 +33,7 @@ func testRequest(t *testing.T, ts *httptest.Server, method,
 
 func Test_app_GetShortenedURL(t *testing.T) {
 	s := storage.New()
-	a := NewApp(s)
+	a := NewApp(s, "http://localhost:8080/")
 	router := chi.NewRouter()
 	router.Post("/", a.GetShortenedURL)
 	router.Get("/{id}", a.GetFullURL)
@@ -66,7 +66,7 @@ func Test_app_GetShortenedURL(t *testing.T) {
 			if resp.StatusCode != 201 {
 				return
 			}
-			assert.Equal(t, "http://localhost:8080/"+tt.want.id, body)
+			assert.Equal(t, a.baseURL+tt.want.id, body)
 		})
 	}
 }
@@ -75,7 +75,7 @@ func Test_app_GetFullURL(t *testing.T) {
 	s := storage.New()
 	s.AddURL("id1", "https://practicum.yandex.ru/")
 	s.AddURL("id2", "u")
-	a := NewApp(s)
+	a := NewApp(s, "http://localhost:8080/")
 	router := chi.NewRouter()
 	router.Post("/", a.GetShortenedURL)
 	router.Get("/{id}", a.GetFullURL)

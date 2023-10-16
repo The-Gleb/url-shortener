@@ -1,10 +1,10 @@
 package server
 
 import (
-	"net/http"
-
 	"github.com/The-Gleb/url-shortener/internal/app"
 	"github.com/go-chi/chi/v5"
+	"log"
+	"net/http"
 )
 
 func NewServer(address string, app app.App) *http.Server {
@@ -21,5 +21,6 @@ func SetUpRoutes(router *chi.Mux, app app.App) {
 }
 
 func RunServer(server *http.Server) error {
+	log.Printf("run server on %s", server.Addr)
 	return server.ListenAndServe()
 }

@@ -12,6 +12,7 @@ import (
 
 type app struct {
 	storage storage.Repository
+	baseURL string
 }
 
 type App interface {
@@ -19,9 +20,10 @@ type App interface {
 	GetFullURL(rw http.ResponseWriter, r *http.Request)
 }
 
-func NewApp(s storage.Repository) *app {
+func NewApp(s storage.Repository, baseURL string) *app {
 	return &app{
 		storage: s,
+		baseURL: baseURL,
 	}
 }
 
@@ -37,7 +39,7 @@ func (a *app) GetShortenedURL(rw http.ResponseWriter, r *http.Request) {
 	a.storage.AddURL(id, string(url))
 	rw.Header().Set("Content-Type", "text/plain")
 	rw.WriteHeader(http.StatusCreated)
-	rw.Write([]byte("http://localhost:8080/" + id))
+	rw.Write([]byte(a.baseURL + id))
 }
 
 func (a *app) GetFullURL(rw http.ResponseWriter, r *http.Request) {
