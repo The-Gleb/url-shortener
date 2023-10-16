@@ -73,14 +73,18 @@ func Test_app_GetShortenedURL(t *testing.T) {
 
 func Test_app_GetFullURL(t *testing.T) {
 	s := storage.New()
-	s.AddURL("id1", "url1")
-	s.AddURL("id2", "url2")
+	s.AddURL("id1", "https://practicum.yandex.ru/")
+	s.AddURL("id2", "u")
 	a := NewApp(s)
 	router := chi.NewRouter()
 	router.Post("/", a.GetShortenedURL)
 	router.Get("/{id}", a.GetFullURL)
 	ts := httptest.NewServer(router)
 	defer ts.Close()
+	testClient := ts.Client()
+	testClient.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
 
 	type want struct {
 		url  string
@@ -97,8 +101,15 @@ func Test_app_GetFullURL(t *testing.T) {
 			name:    "pos test #1",
 			a:       a,
 			address: "/id1",
-			id:      "id1",
-			want:    want{"url1", http.StatusTemporaryRedirect},
+			// id:      "id2",
+			want: want{"https://practicum.yandex.ru/", http.StatusTemporaryRedirect},
+		},
+		{
+			name:    "neg test #2",
+			a:       a,
+			address: "/id3",
+			// id:      "id1",
+			want: want{"", http.StatusBadRequest},
 		},
 	}
 	for _, tt := range tests {
