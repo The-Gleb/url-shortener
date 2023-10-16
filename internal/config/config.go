@@ -2,7 +2,7 @@ package config
 
 import (
 	"flag"
-	// "os"
+	"os"
 )
 
 type Config struct {
@@ -40,12 +40,12 @@ func NewConfigFromFlags() Config {
 	builder = builder.SetServerAddres(serverAddress).
 		SetBaseAddress(baseAddress + "/")
 
-	// if envServerAddress := os.Getenv("ADDRESS"); envServerAddress != "" {
-	// 	builder = builder.SetServerAddres(envServerAddress)
-	// }
-	// if envBaseAddress := os.Getenv("POLL_INTERVAL"); envBaseAddress != "" {
-	// 	builder = builder.SetBaseAddress(envBaseAddress)
-	// }
+	if envServerAddress := os.Getenv("ADDRESS"); envServerAddress != "" {
+		builder = builder.SetServerAddres(envServerAddress)
+	}
+	if envBaseAddress := os.Getenv("POLL_INTERVAL"); envBaseAddress != "" {
+		builder = builder.SetBaseAddress(envBaseAddress + "/")
+	}
 
 	return builder.config
 }
