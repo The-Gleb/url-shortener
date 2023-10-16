@@ -38,7 +38,7 @@ func NewConfigFromFlags() Config {
 	var builder ConfigBuilder
 
 	builder = builder.SetServerAddres(serverAddress).
-		SetBaseAddress(baseAddress)
+		SetBaseAddress(baseAddress + "/")
 
 	// if envServerAddress := os.Getenv("ADDRESS"); envServerAddress != "" {
 	// 	builder = builder.SetServerAddres(envServerAddress)

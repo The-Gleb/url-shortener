@@ -62,6 +62,7 @@ func Test_app_GetShortenedURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			resp, body := testRequest(t, ts, "POST", tt.address, strings.NewReader(tt.url))
+			defer resp.Body.Close()
 			assert.Equal(t, tt.want.code, resp.StatusCode)
 			if resp.StatusCode != 201 {
 				return
@@ -117,6 +118,7 @@ func Test_app_GetFullURL(t *testing.T) {
 			log.Println("Start test")
 
 			resp, _ := testRequest(t, ts, "GET", tt.address, nil)
+			defer resp.Body.Close()
 
 			assert.Equal(t, tt.want.code, resp.StatusCode)
 			if resp.StatusCode != 307 {
