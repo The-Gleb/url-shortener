@@ -31,7 +31,7 @@ func NewConfigFromFlags() Config {
 	flag.StringVar(&serverAddress, "a", ":8080", "address and port to run server")
 
 	var baseAddress string
-	flag.StringVar(&baseAddress, "b", "http://localhost:8080/", "address before shortened url")
+	flag.StringVar(&baseAddress, "b", "http://localhost:8080", "address before shortened url")
 
 	flag.Parse()
 
